@@ -1,0 +1,131 @@
+package ru.vsu.dao;
+
+import ru.vsu.domain.Department;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import ru.vsu.domain.Product;
+/**
+ * Created by user on 30.11.2016.
+ */
+public class ProductDao {
+
+    private Connection connection;
+
+    public ProductDao(Connection connection) {
+        this.connection = connection;
+    }
+
+    List<Product> products = new ArrayList<Product>();
+
+    public List<Product> findAll() {
+
+        String findAll = "select * from Product";
+        try {
+           
+            PreparedStatement statement = connection.prepareStatement(findAll);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                products.add(new Product(rs.getString(1), rs.getInt(2), rs.getInt(3)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        
+        return products;
+    }
+    public List<Product> Insert(String Name, int Cost, int DepId)
+    {
+        String insert = "INSERT INTO Product(Product_name, Cost, Department_id) values(?, ?, ?)";
+        try {
+            
+            PreparedStatement statement = connection.prepareStatement(insert);
+            statement.setString(1, Name);
+            statement.setInt(2, Cost);
+            statement.setInt(3, DepId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                products.add(new Product(rs.getString(1), rs.getInt(2), rs.getInt(3)));
+                //departments.add(new Department( rs.getString(1), rs.getString(2)));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        
+        }
+        return products;
+
+    }
+
+    public List<Product>  Delete(int depId, int prodId)
+    {
+        Connection connection = null;
+        String delete = "DELETE FROM Product WHERE Department_id= ? AND Product_id = ?";
+        try {
+           
+            PreparedStatement statement = connection.prepareStatement(delete);
+            statement.setInt(1, depId);
+            statement.setInt(2, prodId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return products;
+
+    }
+
+    public List<Product> Update(int prodId, int depId, String Name, int Cost) {
+        String update = "UPDATE Product SET Product_name = ? AND Cost = ?  AND Department_id = ? WHERE Product_id=?;";
+        Connection connection = null;
+
+        try {
+        
+            PreparedStatement statement = connection.prepareStatement(update);
+            statement.setString(1, Name);
+            statement.setInt(2, Cost);
+            statement.setInt(3, depId);
+            statement.setInt(4, prodId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return products;
+    }
+
+    public Product SelectId(int depId)
+    {
+        Product prod = new Product();
+        String selectId = "SELECT * FROM Product WHERE Department_id = ?";
+        Connection connection = null;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(selectId);
+            statement.setInt(1, depId);
+
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                prod.setName(rs.getString(1));
+                prod.setCost(rs.getInt(2));
+                prod.setDepId(rs.getInt(3));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return prod;
+    }
+
+    }
+
