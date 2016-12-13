@@ -1,0 +1,136 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ru.vsu.service;
+import java.sql.Connection;
+import ru.vsu.dao.Connector;
+import ru.vsu.dao.DepartmentDao;
+import ru.vsu.dao.ProductDao;
+import java.util.Scanner;
+/**
+ *
+ * @author user
+ */
+public class UserInterface {
+   
+    public static void mainMenu(DepartmentDao dd, ProductDao pd){
+        Scanner scan = new Scanner(System.in);
+        int doing;
+
+        System.out.println("\n Please, choose? \nAdd  -  1, \nDelete  -  2, \nEdit  -  3, \nShow-  4");
+        doing = Integer.parseInt(scan.nextLine());
+
+        switch (doing) {
+            case 1:
+                System.out.println("Add department  -  1, \nadd product  -   2");
+                int s = Integer.parseInt(scan.nextLine());
+                switch (s) {
+                    case 1:
+                        String name,hours;
+                        System.out.println("Enter name");
+                        name = scan.nextLine();
+                        System.out.println("Enter hours of work");
+                        hours = scan.nextLine();
+                        
+                        dd.Insert(name, hours);
+
+                        break;
+                    case 2:
+                        int id, cost;
+                        String name2;
+                         System.out.println("In department:");
+                        id = Integer.parseInt(scan.nextLine());
+                        System.out.println("Enter name");
+                        name2 = scan.nextLine();
+                        System.out.println("Enter cost:");
+                        cost = Integer.parseInt(scan.nextLine());
+
+                        pd.Insert(name2, cost, id);
+                        break;
+                    default:
+                        System.out.println("Error!");
+                }
+                break;
+            case 2:
+                System.out.println("Delete department  -  1, \ndelete product  -  2");
+                int sw = Integer.parseInt(scan.nextLine());
+                switch (sw) {
+                    case 1:
+                        System.out.println("Enter id:");
+                        int index1 = Integer.parseInt(scan.nextLine());
+                        dd.Delete(index1);
+                        break;
+                    case 2:
+                        System.out.println("Department id:");
+                        int index2 = Integer.parseInt(scan.nextLine());
+                        System.out.println("Product id:");
+                        int index3 = Integer.parseInt(scan.nextLine());
+                       pd.Delete(index2, index3);
+                        break;
+                    default:
+                        System.out.println("Error!");
+                }
+
+                break;
+            case 3:
+                System.out.println("Edit department  -  1, \nedit product  -  2");
+                int s1 = Integer.parseInt(scan.nextLine());
+                switch (s1) {
+                    case 1:
+                        System.out.println("Department id:");
+                        int index1 = Integer.parseInt(scan.nextLine());
+                        System.out.println("Enter new name:");
+                        String nm1 = scan.nextLine();
+                        System.out.println("Enter new hours:");
+                        String hr = scan.nextLine();
+                        dd.Update(index1, nm1, hr);
+                        break;
+                    case 2:
+                        System.out.println("Department id:");
+                        int index2 = Integer.parseInt(scan.nextLine());
+                        System.out.println("Product id:");
+                        int index3 = Integer.parseInt(scan.nextLine());
+                        System.out.println("Enter new name:");
+                        String nm2 = scan.nextLine();
+                        System.out.println("Enter new cost:");
+                        int cs = Integer.parseInt(scan.nextLine());
+                       pd.Update(index2, index3, nm2, cs);
+                        break;
+
+                    default:
+                        System.out.println("Error!");
+                }
+
+                break;
+            case 4:
+                System.out.println("Show all departments  -1, \nshow all products  -2, \nshow products in department  -3");
+                int ch = Integer.parseInt(scan.nextLine());
+                switch (ch) {
+                    case 1:
+                        dd.findAll();
+                        break;
+                    case 2:
+                        pd.findAll();
+                        break;
+                    case 3:
+                        System.out.println("Enter department ID:");
+                        int id = Integer.parseInt(scan.nextLine());
+                        pd.SelectId(id);
+                        break;
+                    default:
+                        System.out.println("Error!");
+                }
+                break;
+
+            default:
+                System.out.println("Error!");
+
+                break;
+        }
+        UserInterface.mainMenu(dd, pd);
+    }
+   
+    
+}
