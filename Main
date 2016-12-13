@@ -1,0 +1,26 @@
+import java.sql.SQLException;
+import java.util.Scanner;
+import ru.vsu.dao.DepartmentDao;
+import ru.vsu.dao.Connector;
+import ru.vsu.dao.ProductDao;
+import ru.vsu.service.UserInterface;
+/**
+ *
+ * @author user
+ */
+public class MyNewShop {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args)throws SQLException, ClassNotFoundException  {
+         Connection connection;
+         Connector connector;
+         connector = Connector.getInstance();
+         connection = connector.getConnection();
+         DepartmentDao dd= new DepartmentDao(connection);
+         ProductDao pd= new ProductDao(connection);
+         UserInterface.mainMenu(dd, pd);
+       // Shop shop = new Shop();
+        //shop.initialise();
+       // choose(shop);
