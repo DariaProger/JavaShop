@@ -1,0 +1,129 @@
+package ru.vsu.dao;
+import ru.vsu.domain.Shop;
+import ru.vsu.domain.Department;
+
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by user on 30.11.2016.
+ */
+public class DepartmentDao {
+
+    Connection connection;
+    public DepartmentDao(Connection connection) {
+        this.connection = connection;
+    }
+
+    List<Department> departments = new ArrayList<Department>();
+
+    public List<Department> findAll() {
+
+        String findAll = "select * from Department";
+        try {
+            
+            PreparedStatement statement = connection.prepareStatement(findAll);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                System.out.println("РќР°Р·РІР°РЅРёРµ РѕС‚РґРµР»Р°" + rs.getString(1)
+                        + "\t Р’СЂРµРјСЏ СЂР°Р±РѕС‚С‹" + rs.getString(2));
+               // departments.add(new Department(rs.getString(1), rs.getInt(2)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+       
+        }
+        return departments;
+    }
+    public  List<Department> Insert(String Name, String Hours)
+    {
+        String insert = "INSERT INTO Department(Department_name, Hours) values(?, ?)";
+        Connection connection = null;
+        try {
+            
+          
+            PreparedStatement statement = connection.prepareStatement(insert);
+            statement.setString(1, Name);
+            statement.setString(2, Hours);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                departments.add(new Department(Name, Hours));
+                //departments.add(new Department( rs.getString(1), rs.getString(2)));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return departments;
+
+    }
+
+    public List<Department>  Delete(int id)
+    {
+        Connection connection = null;
+        String delete = "DELETE FROM Department WHERE Department_id= ?";
+        try {
+
+            PreparedStatement statement = connection.prepareStatement(delete);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        
+        }
+        return departments;
+
+    }
+
+    public List<Department> Update(int id, String Name, String Hours) {
+        String update = "UPDATE Department SET Department_name = ? AND Hours = ? WHERE Department_id=?;";
+        Connection connection = null;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(update);
+            statement.setString(1, Name);
+            statement.setString(2, Hours);
+            statement.setInt(3, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return departments;
+    }
+
+    public Department SelectId(int id)
+    {
+        Department dep = new Department();
+        String selectId = "SELECT * FROM Department WHERE Department_id = ?";
+        Connection connection = null;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(selectId);
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                dep.setName(rs.getString(1));
+                dep.setHours(rs.getString(2));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dep;
+    }
+}
+
