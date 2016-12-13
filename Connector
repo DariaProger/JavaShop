@@ -1,0 +1,56 @@
+package ru.vsu.dao;
+
+import com.mysql.fabric.jdbc.FabricMySQLConnection;
+import com.mysql.fabric.jdbc.FabricMySQLDriver;
+
+import java.sql.*;
+
+/**
+ * Created by user on 16.11.2016.
+ */
+public class Connector {
+
+    private static Connector instance;
+    public  Connection connection;
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/Shop?autoReconnect=true&useSSL=false";
+    private static final String LOGIN = "root";
+    private static final String PASSWORD = "Daria8";
+
+    public Connector() {
+    }
+
+    public static Connector getInstance() {
+        if (instance == null) {
+            instance = new Connector();
+        }
+        return instance;
+    }
+
+    public Connection getConnection() throws SQLException, ClassNotFoundException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(URL, LOGIN, PASSWORD);
+            System.out.println("Conection opened");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+
+    /* public Connection getConnection() throws SQLException {
+        System.out.println("Conection opened");
+        return DriverManager.getConnection(URL, LOGIN, PASSWORD);
+        
+    }*/
+    public void closeConnection(Connection connection) {
+        if (connection == null) {
+            return;
+        }
+        try {
+            connection.close();
+            System.out.println("Conection closed");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
